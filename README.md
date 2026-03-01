@@ -1,4 +1,4 @@
-# 🟠 Illini Relief
+# Illini Relief
 
 > **"Find your way through any UIUC building—instantly."**
 
