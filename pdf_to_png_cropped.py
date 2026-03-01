@@ -2,8 +2,8 @@ import os
 from pdf2image import convert_from_path
 from PIL import Image
 
-input_folder = "data"
-output_folder = "data_png"
+input_folder = "data_with_tickers"
+output_folder = "data_with_tickers_png"
 
 os.makedirs(output_folder, exist_ok=True)
 
