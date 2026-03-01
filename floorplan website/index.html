@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Floorplan Viewer</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Panzoom for zoom & drag -->
+    <script src="https://unpkg.com/panzoom/dist/panzoom.min.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Interactive Floorplan Viewer</h1>
+</header>
+
+<main>
+    <div class="viewer">
+        <div class="map-container" id="map-container">
+            <img id="floorplan" />
+            <canvas id="overlay"></canvas>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="prevImage()">⬅ Prev</button>
+        <button onclick="nextImage()">Next ➡</button>
+        <button onclick="setMode('restroom')">Find Restroom</button>
+        <button onclick="setMode('water')">Find Water Fountain</button>
+        <button onclick="setMode(null)">Show All</button>
+    </div>
+
+    <div id="status"></div>
+</main>
+
+<footer>
+    <p>Floorplan Viewer • Powered by Supabase</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
