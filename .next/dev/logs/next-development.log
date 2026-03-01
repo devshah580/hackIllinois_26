@@ -1,0 +1,24 @@
+[00:00:01.391] Server  LOG     ✓ Ready in 1227ms
+[00:03:05.286] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:18.039] Browser ERROR   {}
+[00:03:25.476] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:58.351] Server  LOG     ✓ Compiled in 33ms
+[00:06:30.392] Server  LOG     ✓ Compiled in 26ms
+[00:06:32.402] Server  LOG     ✓ Compiled in 22ms
+[00:07:00.899] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:35.493] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.495] Server  ERROR   ⨯ "unhandledRejection:" Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.495] Server  ERROR   ⨯ "unhandledRejection: " Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.499] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.500] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.502] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.503] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.505] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.507] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.510] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.511] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.515] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.516] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.519] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.521] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/devshah/CS Projects/hackIllinois_26/app'
+[00:08:35.555] Server  LOG     ✓ Compiled in 44ms
