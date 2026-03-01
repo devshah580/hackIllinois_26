@@ -26,7 +26,7 @@ for file in os.listdir(input_folder):
 
             # Open and crop
             img = Image.open(png_path)
-            crop_box = (0, 0, 2750, 2000)
+            crop_box = (0, 0, 2750, 2300)
             cropped = img.crop(crop_box)
 
             cropped.save(png_path)
