@@ -11,10 +11,14 @@ export default function Home() {
   const [building, setBuilding] = useState(buildings[0]);
   const [floor, setFloor] = useState(buildingData[buildings[0]][0]);
   const [targetType, setTargetType] = useState<TargetType>("Room Number");
+
+  // NEW: Track both current and destination
+  const [currentRoom, setCurrentRoom] = useState("");
   const [destinationRoom, setDestinationRoom] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleBuildingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newBuilding = e.target.value;
@@ -26,35 +30,33 @@ export default function Home() {
     e.preventDefault();
     setLoading(true);
     setImageSrc(null);
+    setError(null);
 
-    const payload = {
+    // Construct URL with distinct current and target rooms
+    const params = new URLSearchParams({
       building,
       floor,
-      room_number: targetType === "Room Number" ? destinationRoom : "",
-      bathroom: targetType === "Bathroom" ? 1 : 0,
-      water: targetType === "Water" ? 1 : 0,
-    };
+      curr_room: currentRoom,
+      target_room: targetType === "Room Number" ? destinationRoom : "",
+      bathroom: (targetType === "Bathroom").toString(),
+      water_fountain: (targetType === "Water").toString(),
+    });
 
     try {
-      // Placeholder URL. Replace with actual python backend URL
-      const response = await fetch("http://127.0.0.1:5000/api/navigate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
+      const response = await fetch(`http://127.0.0.1:8000/api/calculate_route?${params.toString()}`);
+      console.log("before response");
       if (!response.ok) {
-        throw new Error("Failed to fetch floor map");
+        const errData = await response.json();
+        console.log("no response");
+        throw new Error(errData.detail || "Failed to fetch floor map");
       }
-
+      console.log("response");
       const blob = await response.blob();
       const imageUrl = URL.createObjectURL(blob);
       setImageSrc(imageUrl);
-    } catch (error) {
-      console.error(error);
-      alert("Error connecting to backend or fetching image.");
+    } catch (err: any) {
+      console.log("catch response");
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -62,10 +64,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>
-        Illini <span className={styles.illiniOrange}>Relief</span>
-      </h1>
-      <p className={styles.subtitle}>Find your way through any UIUC building.</p>
+      <h1 className={styles.title}>Illini <span className={styles.illiniOrange}>Relief</span></h1>
 
       <form className={styles.glassCard} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
@@ -99,6 +98,18 @@ export default function Home() {
         </div>
 
         <div className={styles.formGroup}>
+          <label className={styles.label}>Where are you now? (Room #)</label>
+          <input
+            type="text"
+            className={styles.input}
+            placeholder="e.g. 1205"
+            value={currentRoom}
+            onChange={(e) => setCurrentRoom(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
           <label className={styles.label}>What are you looking for?</label>
           <select
             className={styles.select}
@@ -112,7 +123,7 @@ export default function Home() {
         </div>
 
         {targetType === "Room Number" && (
-          <div className={`${styles.formGroup} ${styles.expandField}`}>
+          <div className={styles.formGroup}>
             <label className={styles.label}>Destination Room Number</label>
             <input
               type="text"
@@ -120,24 +131,24 @@ export default function Home() {
               placeholder="e.g. 2400"
               value={destinationRoom}
               onChange={(e) => setDestinationRoom(e.target.value)}
-              required={targetType === "Room Number"}
+              required
             />
           </div>
         )}
 
-        <button
-          type="submit"
-          className={styles.button}
-          disabled={loading || (targetType === "Room Number" && !destinationRoom.trim())}
-        >
-          {loading ? <div className={styles.spinner}></div> : "Find My Way"}
+        <button type="submit" className={styles.button} disabled={loading}>
+          {loading ? "Calculating..." : "Find My Way"}
         </button>
+        {error && (
+          <div className={styles.errorBox}>
+            <p>{error}</p>
+          </div>
+        )}
       </form>
 
       {imageSrc && (
         <div className={styles.imageContainer}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={imageSrc} alt="Floor map with navigation path" className={styles.mapImg} />
+          <img src={imageSrc} alt="Navigation Path" className={styles.mapImg} />
         </div>
       )}
     </div>

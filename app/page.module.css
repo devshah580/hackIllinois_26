@@ -201,3 +201,15 @@
     pointer-events: all;
   }
 }
+
+.errorBox {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  animation: fadeIn 0.3s ease forwards;
+}
