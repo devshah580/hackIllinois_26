@@ -35,12 +35,22 @@ def cluster_matches(matches, distance=25):
 
     for m in matches:
         x, y = m["x"], m["y"]
+<<<<<<< HEAD
+=======
+        image = m["image"]
+>>>>>>> 555cca95e76642ff41ddc7a9e1117e97bcd15972
         placed = False
 
         for cluster in clusters:
             cx, cy = cluster["center"]
+<<<<<<< HEAD
 
             if abs(cx - x) < distance and abs(cy - y) < distance:
+=======
+            c_image = cluster["best"]["image"]
+
+            if c_image == image and abs(cx - x) < distance and abs(cy - y) < distance:
+>>>>>>> 555cca95e76642ff41ddc7a9e1117e97bcd15972
                 cluster["points"].append(m)
 
                 # Keep best scoring point as center

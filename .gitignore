@@ -1,2 +1,7 @@
 .venv
 .DS_Store
+<<<<<<< HEAD
+=======
+node_modules/
+>>>>>>> 555cca95e76642ff41ddc7a9e1117e97bcd15972
+.next/
