@@ -59,8 +59,6 @@ def template_match(input_folder):
 
         image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-        print(f"\nProcessing: {file}")
-
         for ticker_file in os.listdir(ticker_folder):
             ticker_path = os.path.join(ticker_folder, ticker_file)
 
@@ -121,11 +119,9 @@ if __name__ == "__main__":
 
     clusters = cluster_matches(raw_matches)
 
-    print("\nFINAL BATHROOM POSITIONS:\n")
 
     for c in clusters:
         x, y = c["center"]
         ticker = c["ticker"]
         image = c["image"]
 
-        print(f"{ticker} in {image} → ({x}, {y})")
