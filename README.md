@@ -1,38 +1,64 @@
-# Illini Relief
+# 🟠 Illini Relief
 
-> **Stop wandering, start walking.** The intelligent indoor navigation system for the University of Illinois Urbana-Champaign.
+> **"Find your way through any UIUC building—instantly."**
 
-## Overview
+**Illini Relief** is an intelligent indoor navigation system designed to eliminate the frustration of getting lost in UIUC’s most complex buildings. By combining Computer Vision (OCR) with advanced pathfinding algorithms, we transform static floorplans into dynamic, routed maps.
 
-Navigating massive campus buildings like Grainger Library or Siebel Center can feel like entering a labyrinth. **Illini Relief** transforms static, confusing floorplan images into an interactive GPS-like experience. By leveraging Computer Vision and optimized pathfinding, we provide students with the fastest routes to classrooms, restrooms, and water fountains.
+---
+
+## The Problem
+
+Navigating "labyrinth" buildings like Grainger Library or Siebel Center is a rite of passage for Illini—but it shouldn't be. Students often waste time wandering hallways looking for a specific classroom, the nearest water fountain, or an accessible restroom. Existing GPS tools stop at the front door; **Illini Relief** takes you the rest of the way.
 
 ## Key Features
 
-* **Intelligent OCR Mapping:** Automatically extracts room numbers and coordinates from raw PNG floorplans.
-* **Dynamic Pathfinding:** Uses advanced algorithms to calculate the shortest walkable path through complex hallway geometries.
-* **Points of Interest (POI):** One-click routing to the nearest essential facilities (Restrooms, Water Fountains).
-* **Seamless UI:** A modern, "glassmorphism" web interface built for speed and accessibility.
+* **Intelligent OCR Mapping:** Automatically extracts room numbers and spatial coordinates $(x, y)$ from raw PNG floorplans using `EasyOCR`.
+* **Hallway-Aware Routing:** Custom pathfinding logic ensures routes follow walkable paths and don't "clip" through walls.
+* **POI Quick-Select:** One-tap navigation to the nearest essential facilities (Restrooms, Water Fountains).
+* **Modern Glassmorphism UI:** A sleek, responsive Next.js frontend designed for students on the move.
+
+---
 
 ## Technical Stack
 
-* **Frontend:** Next.js 15+, TypeScript, CSS Modules.
-* **Backend:** FastAPI (Python), Uvicorn.
-* **Database & Storage:** Supabase (PostgreSQL + Bucket Storage).
-* **Computer Vision:** OpenCV / EasyOCR (via `room_location.py`).
-* **Pathfinding Logic:** Custom graph traversal (via `hallway4.py`).
+| Component | Technology |
+| --- | --- |
+| **Frontend** | Next.js 15 (Turbopack), TypeScript, CSS Modules |
+| **Backend** | FastAPI (Python), Uvicorn |
+| **Database** | Supabase (PostgreSQL) |
+| **Storage** | Supabase Buckets (Floorplan Assets) |
+| **CV & Logic** | OpenCV, EasyOCR, NumPy |
 
-## Getting Started
+---
 
-### 1. Backend Setup
+## How It Works
+
+1. **Ingestion:** Floorplans are uploaded and processed. `room_location.py` identifies room text and anchors them to pixel coordinates.
+2. **Spatial Indexing:** Data is stored in Supabase. We index room IDs against building and floor metadata for $O(1)$ lookup speeds.
+3. **The Routing Engine:** When a user requests a path:
+* The backend retrieves the $(x, y)$ start and end points.
+* If a "Bathroom" is requested, it calculates the **Euclidean distance** $d = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$ to find the nearest ticker.
+* `hallway4.py` generates the optimal path and draws it onto the image buffer.
+
+
+4. **Delivery:** The processed image is sent back to the Next.js frontend as a `blob` and displayed instantly.
+
+---
+
+## Installation & Setup
+
+### 1. Backend (Python)
 
 ```bash
 cd backend
+python -m venv .venv
+source .venv/bin/activate  # Or .venv\Scripts\activate on Windows
 pip install -r requirements.txt
 uvicorn main:app --reload
 
 ```
 
-### 2. Frontend Setup
+### 2. Frontend (Next.js)
 
 ```bash
 cd frontend
@@ -41,15 +67,16 @@ npm run dev
 
 ```
 
-## How it Works
-
-1. **Image Processing:** When a floorplan is uploaded, `room_location.py` scans the image for text, identifying room numbers and their $(x, y)$ coordinates.
-2. **Spatial Data:** These coordinates are indexed in **Supabase** for instant lookup.
-3. **Request:** The user selects their building, floor, and current location.
-4. **The "Relief" Engine:** The backend fetches the floorplan, calculates the shortest path between the start and end coordinates using a custom hallway-aware algorithm, and returns a rendered PNG with the path drawn on it.
+---
 
 ## Challenges We Overcame
 
-* **The "Failed to Fetch" Ghost:** Debugging CORS and network handshake issues between Turbopack-driven Next.js and FastAPI.
-* **Hallway Geometry:** Ensuring the pathfinding didn't "clip" through walls by implementing a robust collision-aware routing logic.
-* **Real-time Image Rendering:** Optimizing the transition from raw image data to a processed, routed map response in under 500ms.
+* **The "Failed to Fetch" Ghost:** We wrestled with CORS middleware and Turbopack caching to ensure seamless communication between our decoupled frontend and backend.
+* **Dynamic Image Manipulation:** Handling image buffers in memory to ensure fast response times without cluttering the server's local storage.
+* **OCR Accuracy:** Fine-tuning the detection of room numbers on low-contrast architectural drawings.
+
+## Future Roadmap
+
+* **Multi-Floor Routing:** Logic for navigating through stairs and elevators between floors.
+* **Live AR View:** Using the phone's camera to overlay pathing arrows on the physical hallway.
+* **Crowdsourced Data:** Allowing users to report closed hallways or broken water fountains in real-time.
