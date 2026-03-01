@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Illini Relief
+
+> **Stop wandering, start walking.** The intelligent indoor navigation system for the University of Illinois Urbana-Champaign.
+
+## Overview
+
+Navigating massive campus buildings like Grainger Library or Siebel Center can feel like entering a labyrinth. **Illini Relief** transforms static, confusing floorplan images into an interactive GPS-like experience. By leveraging Computer Vision and optimized pathfinding, we provide students with the fastest routes to classrooms, restrooms, and water fountains.
+
+## Key Features
+
+* **Intelligent OCR Mapping:** Automatically extracts room numbers and coordinates from raw PNG floorplans.
+* **Dynamic Pathfinding:** Uses advanced algorithms to calculate the shortest walkable path through complex hallway geometries.
+* **Points of Interest (POI):** One-click routing to the nearest essential facilities (Restrooms, Water Fountains).
+* **Seamless UI:** A modern, "glassmorphism" web interface built for speed and accessibility.
+
+## Technical Stack
+
+* **Frontend:** Next.js 15+, TypeScript, CSS Modules.
+* **Backend:** FastAPI (Python), Uvicorn.
+* **Database & Storage:** Supabase (PostgreSQL + Bucket Storage).
+* **Computer Vision:** OpenCV / EasyOCR (via `room_location.py`).
+* **Pathfinding Logic:** Custom graph traversal (via `hallway4.py`).
 
 ## Getting Started
 
-First, run the development server:
+### 1. Backend Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Frontend Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd frontend
+npm install
+npm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
 
-## Learn More
+## How it Works
 
-To learn more about Next.js, take a look at the following resources:
+1. **Image Processing:** When a floorplan is uploaded, `room_location.py` scans the image for text, identifying room numbers and their $(x, y)$ coordinates.
+2. **Spatial Data:** These coordinates are indexed in **Supabase** for instant lookup.
+3. **Request:** The user selects their building, floor, and current location.
+4. **The "Relief" Engine:** The backend fetches the floorplan, calculates the shortest path between the start and end coordinates using a custom hallway-aware algorithm, and returns a rendered PNG with the path drawn on it.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Challenges We Overcame
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* **The "Failed to Fetch" Ghost:** Debugging CORS and network handshake issues between Turbopack-driven Next.js and FastAPI.
+* **Hallway Geometry:** Ensuring the pathfinding didn't "clip" through walls by implementing a robust collision-aware routing logic.
+* **Real-time Image Rendering:** Optimizing the transition from raw image data to a processed, routed map response in under 500ms.
