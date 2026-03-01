@@ -1,0 +1,21 @@
+export const buildingData: Record<string, string[]> = {
+    "Activities and Recreation Center": ["00", "01", "02", "03"],
+    "Administration Building": ["00", "01", "02", "03", "04"],
+    "Beckman Institute for Advanced Science and Technology": ["00", "01", "02", "03", "04", "05"],
+    "Campus Instructional Facility": ["00", "01", "02", "03", "04"],
+    "Digital Computer Laboratory": ["00", "01", "02", "03"],
+    "Electrical and Computer Engineering Building": ["00", "01", "02", "03", "04", "05"],
+    "Food Service Building": ["00", "01"],
+    "Gies Memorial Stadium": ["00", "01", "02", "03", "05", "06", "07", "08"],
+    "Grainger Engineering Library Information Center": ["00", "01", "02", "03", "04"],
+    "Illini Union": ["00", "01", "02", "03", "04"],
+    "Krannert Center for the Performing Arts": ["01", "02", "03", "04", "05"],
+    "Main Library": ["00", "01", "02", "03", "04"],
+    "National Center for Supercomputing Applications": ["00", "01", "02", "03", "04"],
+    "Natural History Building": ["01", "02", "03", "04"],
+    "Newmark Civil Engineering Laboratory": ["00", "01", "02", "03", "04"],
+    "Noyes Laboratory of Chemistry": ["00", "01", "02", "03", "04"],
+    "Sidney Lu Mechanical Engineering Building": ["00", "01", "02", "03"],
+    "Siebel Center for Computer Science": ["00", "01", "02", "03", "04", "05"],
+    "State Farm Center": ["01", "02", "03", "04"]
+};
