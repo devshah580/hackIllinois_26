@@ -1,6 +1,30 @@
 import cv2
 import numpy as np
 import os
+from supabase import create_client, Client
+
+url: str = "https://upsqvxtvlvxyuimngxil.supabase.co"
+key: str = "sb_publishable_KSHPacBUw328_e-hVpgboA_OdLOcGhg"
+supabase: Client = create_client(url, key)
+
+def upload_clusters(clusters, batch_size=500):
+    rows = []
+
+    for cluster in clusters:
+        best = cluster["best"]
+        rows.append({
+            "image": best["image"],
+            "ticker": best["ticker"],
+            "x": best["x"],
+            "y": best["y"],
+        })
+
+    print(f"Uploading {len(rows)} rows")
+
+    for i in range(0, len(rows), batch_size):
+        supabase.table("ticker_locations").insert(
+            rows[i:i+batch_size]
+        ).execute()
 
 
 def cluster_matches(matches, distance=25):
@@ -158,6 +182,7 @@ def template_match_bathroom(input_folder):
                         "y": int(y),
                         "score": float(score)
                     })
+    
 
     return matches
 
@@ -174,5 +199,12 @@ if __name__ == "__main__":
     bathroom_matches = template_match_bathroom(input_folder)
     bathroom_clusters = cluster_matches(bathroom_matches)
 
-    
-        
+    print("Water matches:", len(water_matches))
+    print("Water clusters:", len(water_clusters))
+    print("Bathroom matches:", len(bathroom_matches))
+    print("Bathroom clusters:", len(bathroom_clusters))
+
+    upload_clusters(water_clusters)
+    upload_clusters(bathroom_clusters)
+
+    print("Uploaded to Supabase")
